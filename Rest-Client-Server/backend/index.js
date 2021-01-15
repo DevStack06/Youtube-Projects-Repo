@@ -7,7 +7,11 @@ var http = require("http");
 const cors = require("cors");
 app.set("port", process.env.PORT || 5000);
 var server = http.createServer(app);
-var io = require("socket.io")(server);
+var io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
 mongoose.connect("mongodb://localhost:27017/TestDB1", {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -58,7 +62,7 @@ app.route("/delete").delete((req, res) => {
 io.sockets.on("connection", function (socket) {
   socket.on("messageChange", function (data) {
     console.log(data);
-    socket.emit("receive", data);
+    socket.broadcast.emit("receive", data);
   });
 });
 

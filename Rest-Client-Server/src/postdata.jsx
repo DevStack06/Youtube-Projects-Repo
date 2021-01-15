@@ -41,9 +41,11 @@ function PostRestData() {
   };
   const socketSend = () => {
     socket.emit("messageChange", { msg: msg });
+    setMsg("");
   };
   return (
     <div class="container p-4">
+      <p class="h3 pb-5 text-primary"> Message Page</p>
       <form onSubmit={submitHandler}>
         <div class="form-group">
           <label for="mesage">Message</label>

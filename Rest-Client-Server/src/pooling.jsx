@@ -6,7 +6,7 @@ const RecieveData = () => {
   const [chats, setChats] = React.useState([]);
   React.useEffect(() => {
     getData();
-    const interval = setInterval(() => getData(), 2000);
+    const interval = setInterval(() => getData(), 3000);
     return () => {
       clearInterval(interval);
     };
@@ -21,7 +21,15 @@ const RecieveData = () => {
     return <div className="chat">{i.msg}</div>;
   });
   console.log(chats);
-  return <div class="main">{data}</div>;
+  return (
+    <div class="main">
+      <div>
+        {" "}
+        <p class="h1 ">Example of Pooling</p>
+      </div>
+      <div class="p-5 data">{data}</div>
+    </div>
+  );
 };
 
 export default RecieveData;
