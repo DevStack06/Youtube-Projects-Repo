@@ -2,9 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const port = process.env.PORT || 5000;
 const app = express();
-const router = express.Router();
 const Model = require("./model");
+var http = require("http");
 const cors = require("cors");
+app.set("port", process.env.PORT || 5000);
+var server = http.createServer(app);
+var io = require("socket.io")(server);
 mongoose.connect("mongodb://localhost:27017/TestDB1", {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -48,6 +51,17 @@ app.route("/delete").delete((req, res) => {
   });
 });
 
-app.listen(port, "0.0.0.0", () =>
-  console.log(`welcome your listinnig at port ${port}`)
-);
+// app.listen(port, "0.0.0.0", () =>
+//   console.log(`welcome your listinnig at port ${port}`)
+// );
+
+io.sockets.on("connection", function (socket) {
+  socket.on("messageChange", function (data) {
+    console.log(data);
+    socket.emit("receive", data);
+  });
+});
+
+server.listen(app.get("port"), function () {
+  console.log("Express server listening on port " + app.get("port"));
+});

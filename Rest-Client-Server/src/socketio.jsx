@@ -1,22 +1,23 @@
 import React from "react";
-import axios from "axios";
 import "./useful.css";
-
+import io from "socket.io-client";
+const socket = io("http://localhost:5000/");
 const RecieveData = () => {
   const [chats, setChats] = React.useState([]);
   React.useEffect(() => {
     getData();
-    const interval = setInterval(() => getData(), 2000);
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
   const getData = () => {
-    axios.get("http://localhost:5000/getmsgs").then((res) => {
-      setChats(res.data.data);
-      console.log(res.data.data);
+    socket.on("connect", () => {
+      console.log(socket.connected); // true
+    });
+    socket.on("receive", (msg, callback) => {
+      console.log(`Lgdata --->> ${msg.msg}`);
+
+      setChats(msg.msg);
     });
   };
+
   const data = chats.map((i, index) => {
     return <div className="chat">{i.msg}</div>;
   });
